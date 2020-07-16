@@ -10,6 +10,11 @@
             "StackName": "amplify-asanawebhook-dev-162730",
             "StackId": "arn:aws:cloudformation:ap-northeast-1:983035974902:stack/amplify-asanawebhook-dev-162730/5240aca0-c023-11ea-b11f-06c1e14cac70",
             "AmplifyAppId": "dcgbvhne77bzb"
+        },
+        "categories": {
+            "auth": {
+                "asanawebhook443cb4ff": {}
+            }
         }
     }
 }

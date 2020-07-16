@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/proxy",
+            "lambdaFunction": "WebhookForChime",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "webhook",
+    "apiName": "webhook",
+    "functionArns": [
+        {
+            "lambdaFunction": "WebhookForChime"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-asanawebhook-dev-162730-authRole",
+        "unAuthRoleName": "amplify-asanawebhook-dev-162730-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "WebhookForChime",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "63772944"
+}
