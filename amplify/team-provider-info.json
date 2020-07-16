@@ -1,20 +1,15 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-asanawebhook-dev-162730-authRole",
-            "UnauthRoleArn": "arn:aws:iam::983035974902:role/amplify-asanawebhook-dev-162730-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::983035974902:role/amplify-asanawebhook-dev-162730-authRole",
-            "Region": "ap-northeast-1",
-            "DeploymentBucketName": "amplify-asanawebhook-dev-162730-deployment",
-            "UnauthRoleName": "amplify-asanawebhook-dev-162730-unauthRole",
-            "StackName": "amplify-asanawebhook-dev-162730",
-            "StackId": "arn:aws:cloudformation:ap-northeast-1:983035974902:stack/amplify-asanawebhook-dev-162730/5240aca0-c023-11ea-b11f-06c1e14cac70",
-            "AmplifyAppId": "dcgbvhne77bzb"
-        },
-        "categories": {
-            "auth": {
-                "asanawebhook443cb4ff": {}
-            }
+            "AuthRoleName": "amplify-asanawebhookconsole-dev-11511-authRole",
+            "UnauthRoleArn": "arn:aws:iam::983035974902:role/amplify-asanawebhookconsole-dev-11511-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::983035974902:role/amplify-asanawebhookconsole-dev-11511-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-asanawebhookconsole-dev-11511-deployment",
+            "UnauthRoleName": "amplify-asanawebhookconsole-dev-11511-unauthRole",
+            "StackName": "amplify-asanawebhookconsole-dev-11511",
+            "StackId": "arn:aws:cloudformation:us-east-1:983035974902:stack/amplify-asanawebhookconsole-dev-11511/8b114400-c77f-11ea-b6b7-12217e59f19f",
+            "AmplifyAppId": "dj4rlxdnbnlb1"
         }
     }
 }

@@ -14,15 +14,15 @@
         },
     
     
-          "functionWebhookForChimeName": {
+          "functionAsanaWebhookProxyFunctionName": {
             "Type": "String",
-            "Default": "functionWebhookForChimeName"
+            "Default": "functionAsanaWebhookProxyFunctionName"
           },
         
           
-          "functionWebhookForChimeArn": {
+          "functionAsanaWebhookProxyFunctionArn": {
             "Type": "String",
-            "Default": "functionWebhookForChimeArn"
+            "Default": "functionAsanaWebhookProxyFunctionArn"
           }
         
           
@@ -45,16 +45,16 @@
         
         
         
-      "webhook": {
+      "AsanaWebhookProxy": {
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": "webhook",
+          "Name": "AsanaWebhookProxy",
           "Body": {
             "swagger": "2.0",
             "info": {
               "version": "2018-05-24T17:52:00Z",
-              "title": "webhook"
+              "title": "AsanaWebhookProxy"
             },
             "host": {
                 "Fn::Join": [
@@ -176,7 +176,7 @@
                             
                             {
                                 
-                                "Ref": "functionWebhookForChimeArn"
+                                "Ref": "functionAsanaWebhookProxyFunctionArn"
                             },
                             
                             "/invocations"
@@ -275,7 +275,7 @@
                           
                           {
                             
-                            "Ref": "functionWebhookForChimeArn"
+                            "Ref": "functionAsanaWebhookProxyFunctionArn"
                           },
                           
                           "/invocations"
@@ -332,12 +332,12 @@
                   
         
         
-        "functionWebhookForChimePermissionwebhook": {
+        "functionAsanaWebhookProxyFunctionPermissionAsanaWebhookProxy": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functionWebhookForChimeName"
+                        "Ref":  "functionAsanaWebhookProxyFunctionName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -356,7 +356,7 @@
                             },
                             ":",
                             {
-                                "Ref": "webhook"
+                                "Ref": "AsanaWebhookProxy"
                             },
                             "/*/*/*"
                         ]
@@ -367,7 +367,7 @@
         
         
         
-      "DeploymentAPIGWwebhook63772944": {
+      "DeploymentAPIGWAsanaWebhookProxy": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
@@ -381,7 +381,7 @@
             ]
           },
           "RestApiId": {
-            "Ref": "webhook"
+            "Ref": "AsanaWebhookProxy"
           }
         }
       }
@@ -389,15 +389,15 @@
     "Outputs": {
         "RootUrl": {
             "Description": "Root URL of the API gateway",
-            "Value": {"Fn::Join": ["", ["https://", {"Ref": "webhook"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
+            "Value": {"Fn::Join": ["", ["https://", {"Ref": "AsanaWebhookProxy"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
         },
         "ApiName": {
           "Description": "API Friendly name",
-          "Value": "webhook"
+          "Value": "AsanaWebhookProxy"
         },
         "ApiId": {
           "Description": "API ID (prefix of API URL)",
-          "Value": {"Ref": "webhook"}
+          "Value": {"Ref": "AsanaWebhookProxy"}
         }
     }
   }

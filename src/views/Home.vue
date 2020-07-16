@@ -260,7 +260,7 @@ export default {
         });
     },
     createWebhook(resourceGid, chimeWebhookUrl, personalAccessToken) {
-      const apiEndpoint = API._restApi._options.aws_cloud_logic_custom.find(x => x.name === 'webhook').endpoint
+      const apiEndpoint = API._restApi._options.aws_cloud_logic_custom.find(x => x.name === 'AsanaWebhookProxy').endpoint
       const targetUrl = (this.proxyEnabled)
         ? `${apiEndpoint}/proxy?target=${chimeWebhookUrl}&pat=${personalAccessToken}`
         : chimeWebhookUrl;

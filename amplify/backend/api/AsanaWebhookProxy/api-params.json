@@ -2,34 +2,33 @@
     "paths": [
         {
             "name": "/proxy",
-            "lambdaFunction": "WebhookForChime",
+            "lambdaFunction": "AsanaWebhookProxyFunction",
             "privacy": {
                 "open": true
             }
         }
     ],
-    "resourceName": "webhook",
-    "apiName": "webhook",
+    "resourceName": "AsanaWebhookProxy",
+    "apiName": "AsanaWebhookProxy",
     "functionArns": [
         {
-            "lambdaFunction": "WebhookForChime"
+            "lambdaFunction": "AsanaWebhookProxyFunction"
         }
     ],
     "privacy": {
         "auth": 0,
         "unauth": 0,
-        "authRoleName": "amplify-asanawebhook-dev-162730-authRole",
-        "unAuthRoleName": "amplify-asanawebhook-dev-162730-unauthRole"
+        "authRoleName": "amplify-asanawebhookconsole-dev-11511-authRole",
+        "unAuthRoleName": "amplify-asanawebhookconsole-dev-11511-unauthRole"
     },
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "WebhookForChime",
+            "resourceName": "AsanaWebhookProxyFunction",
             "attributes": [
                 "Name",
                 "Arn"
             ]
         }
-    ],
-    "uuid": "63772944"
+    ]
 }

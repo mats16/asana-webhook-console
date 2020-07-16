@@ -74,7 +74,7 @@ app.post('/proxy', function(req, res) {
           //      })
           //  }
           //}
-          content = `/md\n💬 Comment added by @${user.name}\n[**${task.name}**](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})\n\n---\n${comment}\m`
+          content = `/md\n💬 Comment added by @${user.name}\n[**${task.name}**](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})\n\n---\n${comment}`
         }
       }
       if (content !== '') {

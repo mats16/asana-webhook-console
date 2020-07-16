@@ -33,12 +33,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"WebhookForChime",
+						"AsanaWebhookProxyFunction",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"WebhookForChime",
+									"AsanaWebhookProxyFunction",
 									"-",
 									{
 										"Ref": "env"
@@ -68,8 +68,8 @@
 				"Layers": [],
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-asanawebhook-dev-162730-deployment",
-					"S3Key": "amplify-builds/WebhookForChime-63596b48667676447037-build.zip"
+					"S3Bucket": "amplify-asanawebhookconsole-dev-11511-deployment",
+					"S3Key": "amplify-builds/AsanaWebhookProxyFunction-70516f614a7271723646-build.zip"
 				}
 			}
 		},
@@ -79,12 +79,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"asanawebhookLambdaRole8db755c5",
+						"asanawebhookconsoleLambdaRole792e32af",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"asanawebhookLambdaRole8db755c5",
+									"asanawebhookconsoleLambdaRole792e32af",
 									"-",
 									{
 										"Ref": "env"
