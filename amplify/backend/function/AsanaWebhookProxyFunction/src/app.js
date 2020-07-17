@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
 });
 
 app.post('/proxy', function(req, res) {
-  //console.log(req)
+  const x_hook_signature = req.headers['x-hook-signature']
   const x_hook_secret = req.headers['x-hook-secret']
   if (typeof x_hook_secret === "undefined") {
     const targetUrl = req.query['target'];
@@ -38,30 +38,42 @@ app.post('/proxy', function(req, res) {
     const asanaEventNotify = async (element) => {
       const event = element
       let content = '';
-      if (event.resource.resource_type === 'task' && event.parent.resource_type === 'project') {
-        const userGid = event.user.gid;
-        const taskGid = event.resource.gid;
-        const user = await client.users.getUser(userGid);
-        const task = await client.tasks.getTask(taskGid);
-        const taskName = (task.name === '') ? 'Task Name: TBD' : task.name;
-        const taskDescription = (task.notes === '') ? 'TBD' : task.notes;
+      if (event.resource.resource_type == 'story' && event.parent.resource_type == 'task') {
+        const user = await client.users.getUser(event.user.gid);
+        user.alias = user.email.split('@')[0];
 
-        if (event.action === 'added') {
-          content = `/md\n✏️ Task created by @${user.email}\n[**${taskName}**](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})\n\n---\nProject: [${task.projects[0].name}](https://app.asana.com/0/${task.projects[0].gid}/list)\nDescription: ${taskDescription}`
+        const taskGid = event.parent.gid;
+        const task = await client.tasks.getTask(taskGid);
+        if (task.name == '') { task.notes = 'TBD' }
+        if (task.notes == '') { task.notes = 'TBD' }
+        task.nameWithUrl = `[**${task.name}**](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})`
+
+        if (task.assignee) {
+          const assignee = await client.users.getUser(task.assignee.gid);
+          task.assignee.alias = assignee.email.split('@')[0];
+        } else {
+          task.assignee = { alias: 'TBD' }
         }
 
-      } else if (event.resource.resource_type === 'story' && event.parent.resource_type === 'task') {
-        const userGid = event.user.gid;
-        const storyGid = event.resource.gid;
-        const taskGid = event.parent.gid;
-        const user = await client.users.getUser(userGid);
-        const story = await client.stories.getStory(storyGid);
-        const task = await client.tasks.getTask(taskGid);
+        const resource_subtype = event.resource.resource_subtype
 
-        //if (event.resource.resource_subtype === 'added_to_project') {
-        //  content = `/md\nTask created by @${user.email}\n### [${task.name}](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})\n    ${task.notes}`
-        //}
-        if (event.resource.resource_subtype === 'comment_added') {
+        if (resource_subtype == 'added_to_project') {
+          const msg = `✏️ Task created by ${user.alias}`
+          const details = `Assignee: ${task.assignee.alias}\nDue date: ${task.due_on}\nProject: [${task.projects[0].name}](https://app.asana.com/0/${task.projects[0].gid}/list)\nDescription: ${task.notes}`
+          content = `/md\n${msg}\n${task.nameWithUrl}\n\n---\n${details}`
+        } else if (resource_subtype == 'assigned') {
+          const msg = `👤 Task assigned by ${user.alias}`
+          const details = `Assignee: @${task.assignee.alias}\nDue date: ${task.due_on}\nProject: [${task.projects[0].name}](https://app.asana.com/0/${task.projects[0].gid}/list)\nDescription: ${task.notes}`
+          content = `/md\n${msg}\n${task.nameWithUrl}\n\n---\n${details}`
+        } else if (resource_subtype == 'due_date_changed') {
+          const msg = `⏳ Due date changed by ${user.alias}`
+          const details = `Assignee: ${task.assignee.alias}\nDue date: ${task.due_on}\nProject: [${task.projects[0].name}](https://app.asana.com/0/${task.projects[0].gid}/list)\nDescription: ${task.notes}`
+          content = `/md\n${msg}\n${task.nameWithUrl}\n\n---\n${details}`
+        } else if (resource_subtype == 'comment_added') {
+          const storyGid = event.resource.gid;
+          const story = await client.stories.getStory(storyGid);
+          console.log(JSON.stringify(story, null, '\t'))
+
           let comment = story.text
           const regexp = new RegExp(/https:\/\/app\.asana\.com\/0\/\d{16}\/list/g);
           const result = comment.match(regexp);
@@ -74,10 +86,11 @@ app.post('/proxy', function(req, res) {
           //      })
           //  }
           //}
-          content = `/md\n💬 Comment added by @${user.name}\n[**${task.name}**](https://app.asana.com/0/${task.projects[0].gid}/${taskGid})\n\n---\n${comment}`
+          const msg = `💬 Comment added by ${user.alias}`
+          content = `/md\n${msg}\n${task.nameWithUrl}\n\n---\n${comment}`
         }
       }
-      if (content !== '') {
+      if (content != '') {
         const params = {
           method: 'POST',
           uri: targetUrl,
@@ -93,61 +106,10 @@ app.post('/proxy', function(req, res) {
     console.log(JSON.stringify(events, null, '\t'));
     Promise.all(events.map(asanaEventNotify))
       .finally(() => {
+        res.header('X-Hook-Signature', x_hook_signature);
         res.status(200);
         res.json({});
       });
-
-    //(async () => {
-    //  for await (let event of events) {
-    //    if (event.resource.resource_type === 'task' && event.action === 'added' && event.parent.resource_type === 'project') {
-    //      const taskGid = event.resource.gid;
-    //      client.tasks.getTask(taskGid)
-    //        .then((result) => {
-    //          console.log(result);
-    //          // Chime Post
-    //          const params = {
-    //            method: 'POST',
-    //            uri: target,
-    //            json: { Content: JSON.stringify(result, null, '\t') }
-    //          }
-    //          request(params);
-    //        })
-    //        .catch((err) => {
-    //          console.log(err);
-    //          res.status(200);
-    //          res.json({});
-    //        });
-    //    } else if (event.resource.resource_type === 'story' && event.resource.resource_subtype === 'comment_added' && event.parent.resource_type === 'task') {
-    //      //taskGid = event.parent.gid
-    //      const params = {
-    //        method: 'POST',
-    //        uri: target,
-    //        json: { Content: JSON.stringify(event, null, '\t') }
-    //      }
-    //      request(params);
-    //    }
-    //  }
-    //}).finally(() => {
-    //  res.status(200);
-    //  res.json({});
-    //});
-
-    //const target = req.query['target'];
-    //request({
-    //  method: 'POST',
-    //  uri: target,
-    //  json: { Content: JSON.stringify(req.body, null, '\t') }
-    //})
-    //  .then((result) => {
-    //    console.log(result);
-    //    res.status(200);
-    //    res.json({});
-    //  })
-    //  .catch((err) => {
-    //    console.log(err);
-    //    res.status(200);
-    //    res.json({});
-    //  })
   } else {
     // Handshake
     res.header('X-Hook-Secret', x_hook_secret);

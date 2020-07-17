@@ -69,7 +69,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-asanawebhookconsole-dev-11511-deployment",
-					"S3Key": "amplify-builds/AsanaWebhookProxyFunction-70516f614a7271723646-build.zip"
+					"S3Key": "amplify-builds/AsanaWebhookProxyFunction-7a33747058755a773358-build.zip"
 				}
 			}
 		},

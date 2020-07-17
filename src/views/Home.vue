@@ -6,7 +6,6 @@
         <el-input v-model="personalAccessToken" placeholder="Personal Access Token"></el-input>
       </el-form-item>
 
-      <!--<el-form :inline="true" label-width="120px">-->
       <el-form-item label="Workspace">
         <el-col :span="4">
           <el-select v-model="selectedWorkspaceGid" placeholder="Select Workspace">
@@ -22,7 +21,6 @@
           <el-button type="primary" @click="fetchWorkspaces(personalAccessToken)">Fetch Workspaces</el-button>
         </el-col>
       </el-form-item>
-      <!--</el-form>-->
 
       <el-form-item label="New Webhook">
         <el-form-item>
@@ -54,8 +52,10 @@
 
         <el-form-item label="Events" label-width="120px">
           <el-checkbox-group v-model="whitelistEvents">
-            <el-checkbox label="create_task">Create Task</el-checkbox>
-            <el-checkbox label="comment_added">Add Comment</el-checkbox>
+            <el-checkbox label="added_to_project">Task Created</el-checkbox>
+            <el-checkbox label="assigned">Task Assigned</el-checkbox>
+            <el-checkbox label="due_date_changed">Due Date Changed</el-checkbox>
+            <el-checkbox label="comment_added">Comment Added</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
 
@@ -152,17 +152,9 @@ export default {
       selectedWorkspaceGid: '',
       selectedTeamGid: '',
       selectedProjectGid: '',
-      whitelistEvents: ['create_task', 'comment_added'],
+      whitelistEvents: ['added_to_project', 'assigned', 'due_date_changed', 'comment_added'],
       proxyEnabled: true,
       targetUrl: '',
-      form: {
-        //personalAccessToken: '1/1118174269302114:881cfafea20e250289896c4e0787dfd6',
-        //workspace: '',
-        //team: '',
-        //project: '',
-        filters: [],
-        targetUrl: ''
-      },
       workspaces: [],
       teams: [],
       projects: [],
@@ -217,9 +209,24 @@ export default {
     },
     whitelistFilters: function () {
       const filters = [];
-      if (this.whitelistEvents.includes('create_task')) {
+      if (this.whitelistEvents.includes('added_to_project')) {
         filters.push({
-          resource_type: 'task',
+          resource_type: 'story',
+          resource_subtype: 'added_to_project',
+          action: 'added'
+        })
+      }
+      if (this.whitelistEvents.includes('assigned')) {
+        filters.push({
+          resource_type: 'story',
+          resource_subtype: 'assigned',
+          action: 'added'
+        })
+      }
+      if (this.whitelistEvents.includes('due_date_changed')) {
+        filters.push({
+          resource_type: 'story',
+          resource_subtype: 'due_date_changed',
           action: 'added'
         })
       }
