@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/proxy",
+            "lambdaFunction": "AsanaWebhookProxyFunction",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "AsanaWebhookProxy",
+    "apiName": "AsanaWebhookProxy",
+    "functionArns": [
+        {
+            "lambdaFunction": "AsanaWebhookProxyFunction"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-asanawebhookconsole-dev-11511-authRole",
+        "unAuthRoleName": "amplify-asanawebhookconsole-dev-11511-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "AsanaWebhookProxyFunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
